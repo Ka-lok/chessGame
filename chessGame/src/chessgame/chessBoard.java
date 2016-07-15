@@ -5,6 +5,8 @@
  */
 package chessgame;
 
+import chessgame.chessPieces.chessPawn;
+import java.awt.Color;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
@@ -54,8 +56,18 @@ public class chessBoard extends javax.swing.JFrame {
        
         
         
+        addPawns();
         
-        
+    }
+     
+    public void addPawns(){
+        int counter = 0;
+        while(counter < 8){
+        chessTile temp = arrayBoard [1] [counter];
+        temp.setChessPiece(new chessPawn());
+        temp.getJButton().setText(temp.getChessPiece().getShortName());
+        counter = counter + 1;
+        }
     }
     
     public void addJButtons(){
@@ -212,6 +224,11 @@ public class chessBoard extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jButton1.setText("jButton1");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("jButton2");
 
@@ -228,6 +245,11 @@ public class chessBoard extends javax.swing.JFrame {
         jButton8.setText("jButton8");
 
         jButton9.setText("jButton9");
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton9ActionPerformed(evt);
+            }
+        });
 
         jButton10.setText("jButton10");
 
@@ -581,6 +603,16 @@ public class chessBoard extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        if(!((arrayBoard[1][0]).getChessPiece() == null)){
+            jButton9.setBackground(Color.red);
+        }
+    }//GEN-LAST:event_jButton9ActionPerformed
 
     /**
      * @param args the command line arguments

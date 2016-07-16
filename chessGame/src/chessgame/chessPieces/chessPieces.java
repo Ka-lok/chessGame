@@ -5,6 +5,8 @@
  */
 package chessgame.chessPieces;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Kalok Chan
@@ -15,15 +17,21 @@ public abstract class chessPieces {
     
     protected String shortName;
     
-    private String getName(){
+    protected ArrayList<String> moves;
+    
+    public String getName(){
         return name;
     }
     
-    private void setName(String name){
+    public void setName(String name){
         this.name = name;
     }
     
-    private String getShortName(){
+    public String getShortName(){
         return shortName;
+    }
+    
+    public ArrayList<String> getMoves(){
+        return moves;
     }
 }

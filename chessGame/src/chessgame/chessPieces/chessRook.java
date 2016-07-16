@@ -11,14 +11,16 @@ import java.util.ArrayList;
  *
  * @author Kalok Chan
  */
-public class chessPawn extends chessPieces {
+public class chessRook extends chessPieces {
     
-    public chessPawn(){
-        name = "Pawn";
-        shortName = "P";
+    public chessRook(){
+        name = "Rook";
+        shortName = "R";
         moves = new ArrayList<String>();
-        moves.add("F+1");
+        moves.add("F++");
+        moves.add("B++");
+        moves.add("L++");
+        moves.add("R++");
     }
-    
     
 }

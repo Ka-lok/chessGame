@@ -6,33 +6,34 @@
 package chessgame;
 
 import chessgame.chessPieces.chessPieces;
+import java.awt.Color;
 import javax.swing.JButton;
 
 /**
  *
  * @author Kalok Chan
  */
-public class chessTile {
+public class chessTile extends JButton{
     
-    public chessTile(JButton j){
-        tileJButton = j;
-    }
+    public chessTile(){
+    super();
+    setBackground(new Color(240,240,240));
     
-    private JButton tileJButton;
-    
+            }
     private chessPieces chessPiece;
     
     private int x;
     
     private int y;
     
+    private boolean hasPiece;
     
-    public void setJButton(JButton jButton){
-        tileJButton = jButton;
+    public void setHasPiece(Boolean b){
+        hasPiece = b;
     }
     
-    public JButton getJButton(){
-        return tileJButton;
+    public boolean getHasPiece(){
+        return hasPiece;
     }
     
     public chessPieces getChessPiece(){
@@ -40,8 +41,9 @@ public class chessTile {
     }
     
     public void setChessPiece(chessPieces chessPiece){
-        this.chessPiece = chessPiece;
         
+        this.chessPiece = chessPiece;
+        setHasPiece(true);
     }
     
     public void setX(int x){

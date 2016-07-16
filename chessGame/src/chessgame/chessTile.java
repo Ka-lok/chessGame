@@ -46,19 +46,19 @@ public class chessTile extends JButton{
         setHasPiece(true);
     }
     
-    public void setX(int x){
+    public void setXValue(int x){
         this.x = x;
     }
     
-    public int getX(){
+    public int getXValue(){
         return x;
     }
     
-    public int getY(){
+    public int getYValue(){
         return y;
     }
     
-    public void setY(int y){
+    public void setYValue(int y){
         this.y = y;
     }
     

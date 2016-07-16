@@ -9,6 +9,7 @@ import chessgame.chessPieces.chessBishop;
 import chessgame.chessPieces.chessKing;
 import chessgame.chessPieces.chessKnight;
 import chessgame.chessPieces.chessPawn;
+import chessgame.chessPieces.chessPieces;
 import chessgame.chessPieces.chessQueen;
 import chessgame.chessPieces.chessRook;
 import java.awt.Color;
@@ -17,6 +18,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 /**
  *
@@ -32,8 +34,10 @@ public class chessBoard extends javax.swing.JFrame implements ActionListener {
     public chessBoard() {
 
         initComponents();
+        jPanel = new JPanel();
         Layout = new GridLayout(8, 8);
         setLayout(Layout);
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBoardUp();
         selected = false;
@@ -47,6 +51,7 @@ public class chessBoard extends javax.swing.JFrame implements ActionListener {
     private chessTile selectedTile;
     private ArrayList<String> selectedTileMoves;
     private ArrayList<chessTile> allPossibleMoves;
+    JPanel jPanel;
 
     public void setBoardUp() {
 
@@ -58,11 +63,11 @@ public class chessBoard extends javax.swing.JFrame implements ActionListener {
             while (x < 8) {
                 chessTile temp = new chessTile();
                 temp.addActionListener(this);
-                this.add(temp);
-                temp.setVisible(true);
+                add(temp);
+                //temp.setVisible(true);
 
-                temp.setX(x);
-                temp.setY(y);
+                temp.setXValue(x);
+                temp.setYValue(y);
 
                 arrayBoard[y][x] = temp;
 
@@ -95,28 +100,40 @@ public class chessBoard extends javax.swing.JFrame implements ActionListener {
         chessTile temp = arrayBoard[0][0];
         temp.setChessPiece(new chessRook());
         temp.setText(temp.getChessPiece().getShortName());
+
+        temp = arrayBoard[0][7];
+        temp.setChessPiece(new chessRook());
+        temp.setText(temp.getChessPiece().getShortName());
     }
 
     public void addKnights() {
         chessTile temp = arrayBoard[0][1];
         temp.setChessPiece(new chessKnight());
         temp.setText(temp.getChessPiece().getShortName());
+
+        temp = arrayBoard[0][6];
+        temp.setChessPiece(new chessKnight());
+        temp.setText(temp.getChessPiece().getShortName());
     }
-    
+
     public void addBishops() {
         chessTile temp = arrayBoard[0][2];
         temp.setChessPiece(new chessBishop());
         temp.setText(temp.getChessPiece().getShortName());
+
+        temp = arrayBoard[0][5];
+        temp.setChessPiece(new chessBishop());
+        temp.setText(temp.getChessPiece().getShortName());
     }
-    
-    public void addQueen(){
-        chessTile temp = arrayBoard [0][3];
+
+    public void addQueen() {
+        chessTile temp = arrayBoard[0][3];
         temp.setChessPiece(new chessQueen());
         temp.setText(temp.getChessPiece().getShortName());
     }
-    
-    public void addKing(){
-        chessTile temp = arrayBoard [4][4];
+
+    public void addKing() {
+        chessTile temp = arrayBoard[0][4];
         temp.setChessPiece(new chessKing());
         temp.setText(temp.getChessPiece().getShortName());
     }
@@ -185,6 +202,20 @@ public class chessBoard extends javax.swing.JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
         chessTile temp = (chessTile) e.getSource();
+        
+        if(allPossibleMoves.contains(temp)){
+            chessPieces movingPiece = selectedTile.getChessPiece();
+            selectedTile.setChessPiece(null);
+            selectedTile.setHasPiece(false);
+            selectedTile.setBackground(new Color(240,240,240));
+            selectedTile.setText("");
+            
+            temp.setChessPiece(movingPiece);
+            temp.setText(movingPiece.getShortName());
+            temp.setBackground(new Color(240,240,240));
+            clearAllOtherMoves();
+            allPossibleMoves.clear();
+        } else {
 
         if (temp.getHasPiece()) {
             if (selected) {
@@ -205,8 +236,21 @@ public class chessBoard extends javax.swing.JFrame implements ActionListener {
             selectedTile.setBackground(Color.red);
 
             checkMoves(selectedTile);
+            
+            
+        }
         }
 
+    }
+    
+    public void clearAllOtherMoves(){
+        int possibleMovesSize = allPossibleMoves.size();
+        int counter  = 0;
+        while(counter < possibleMovesSize){
+            chessTile temp = allPossibleMoves.get(counter);
+            temp.setBackground(new Color (240,240,240));
+            counter = counter + 1;
+        }
     }
 
     public void checkMoves(chessTile tile) {
@@ -219,75 +263,91 @@ public class chessBoard extends javax.swing.JFrame implements ActionListener {
             chessTile possibleMove;
 
             if (selectedTileMoves.get(counter).equals("F+1")) {
-                possibleMove = arrayBoard[tile.getY() + 1][tile.getX()];
-                if (!possibleMove.getHasPiece()) {
-                    allPossibleMoves.add(possibleMove);
-                    possibleMove.setBackground(Color.green);
+                if (tile.getYValue() + 1 < 8) {
+                    possibleMove = arrayBoard[tile.getYValue() + 1][tile.getXValue()];
+                    if (!possibleMove.getHasPiece()) {
+                        allPossibleMoves.add(possibleMove);
+                        possibleMove.setBackground(Color.green);
+                    }
                 }
             }
-            
+
             if (selectedTileMoves.get(counter).equals("B+1")) {
-                possibleMove = arrayBoard[tile.getY() - 1][tile.getX()];
-                if (!possibleMove.getHasPiece()) {
-                    allPossibleMoves.add(possibleMove);
-                    possibleMove.setBackground(Color.green);
+                if (tile.getYValue() - 1 > (-1)) {
+                    possibleMove = arrayBoard[tile.getYValue() - 1][tile.getXValue()];
+                    if (!possibleMove.getHasPiece()) {
+                        allPossibleMoves.add(possibleMove);
+                        possibleMove.setBackground(Color.green);
+                    }
                 }
             }
-            
+
             if (selectedTileMoves.get(counter).equals("R+1")) {
-                possibleMove = arrayBoard[tile.getY()][tile.getX() + 1];
-                if (!possibleMove.getHasPiece()) {
-                    allPossibleMoves.add(possibleMove);
-                    possibleMove.setBackground(Color.green);
+                if (tile.getXValue() + 1 < 8) {
+                    possibleMove = arrayBoard[tile.getYValue()][tile.getXValue() + 1];
+                    if (!possibleMove.getHasPiece()) {
+                        allPossibleMoves.add(possibleMove);
+                        possibleMove.setBackground(Color.green);
+                    }
                 }
             }
-            
+
             if (selectedTileMoves.get(counter).equals("L+1")) {
-                possibleMove = arrayBoard[tile.getY()][tile.getX() - 1];
-                if (!possibleMove.getHasPiece()) {
-                    allPossibleMoves.add(possibleMove);
-                    possibleMove.setBackground(Color.green);
+                if (tile.getXValue() - 1 > (-1)) {
+                    possibleMove = arrayBoard[tile.getYValue()][tile.getXValue() - 1];
+                    if (!possibleMove.getHasPiece()) {
+                        allPossibleMoves.add(possibleMove);
+                        possibleMove.setBackground(Color.green);
+                    }
                 }
             }
-            
+
             if (selectedTileMoves.get(counter).equals("DL+1")) {
-                possibleMove = arrayBoard[tile.getY() + 1][tile.getX() - 1];
+                if(tile.getYValue() + 1 < 8 && tile.getXValue() - 1 > (-1)){
+                possibleMove = arrayBoard[tile.getYValue() + 1][tile.getXValue() - 1];
                 if (!possibleMove.getHasPiece()) {
                     allPossibleMoves.add(possibleMove);
                     possibleMove.setBackground(Color.green);
                 }
+                }
             }
-            
+
             if (selectedTileMoves.get(counter).equals("DL-1")) {
-                possibleMove = arrayBoard[tile.getY() - 1][tile.getX() + 1];
-                if (!possibleMove.getHasPiece()) {
-                    allPossibleMoves.add(possibleMove);
-                    possibleMove.setBackground(Color.green);
+                if (tile.getXValue() + 1 < 8 && tile.getYValue() - 1 > (-1)) {
+                    possibleMove = arrayBoard[tile.getYValue() - 1][tile.getXValue() + 1];
+                    if (!possibleMove.getHasPiece()) {
+                        allPossibleMoves.add(possibleMove);
+                        possibleMove.setBackground(Color.green);
+                    }
                 }
             }
-            
+
             if (selectedTileMoves.get(counter).equals("DR+1")) {
-                possibleMove = arrayBoard[tile.getY() + 1][tile.getX() + 1];
-                if (!possibleMove.getHasPiece()) {
-                    allPossibleMoves.add(possibleMove);
-                    possibleMove.setBackground(Color.green);
+                if (tile.getYValue() + 1 < 8 && tile.getXValue() < 8) {
+                    possibleMove = arrayBoard[tile.getYValue() + 1][tile.getXValue() + 1];
+                    if (!possibleMove.getHasPiece()) {
+                        allPossibleMoves.add(possibleMove);
+                        possibleMove.setBackground(Color.green);
+                    }
                 }
             }
-            
+
             if (selectedTileMoves.get(counter).equals("DR-1")) {
-                possibleMove = arrayBoard[tile.getY() - 1 ][tile.getX() - 1];
-                if (!possibleMove.getHasPiece()) {
-                    allPossibleMoves.add(possibleMove);
-                    possibleMove.setBackground(Color.green);
+                if (tile.getYValue() - 1 > (-1) && tile.getXValue() - 1 > (-1)) {
+                    possibleMove = arrayBoard[tile.getYValue() - 1][tile.getXValue() - 1];
+                    if (!possibleMove.getHasPiece()) {
+                        allPossibleMoves.add(possibleMove);
+                        possibleMove.setBackground(Color.green);
+                    }
                 }
             }
 
             if (selectedTileMoves.get(counter).equals("F++")) {
-                int possibleMovesYPosition = tile.getY() + 1;
+                int possibleMovesYPosition = tile.getYValue() + 1;
 
                 while (possibleMovesYPosition < 8 && possibleMovesYPosition > -1) {
 
-                    possibleMove = arrayBoard[possibleMovesYPosition][tile.getX()];
+                    possibleMove = arrayBoard[possibleMovesYPosition][tile.getXValue()];
                     if (possibleMove.getHasPiece()) {
                         break;
                     }
@@ -300,10 +360,10 @@ public class chessBoard extends javax.swing.JFrame implements ActionListener {
             }
 
             if (selectedTileMoves.get(counter).equals("B++")) {
-                int possibleMovesYPosition = tile.getY() - 1;
+                int possibleMovesYPosition = tile.getYValue() - 1;
 
                 while (possibleMovesYPosition < 8 && possibleMovesYPosition > -1) {
-                    possibleMove = arrayBoard[possibleMovesYPosition][tile.getX()];
+                    possibleMove = arrayBoard[possibleMovesYPosition][tile.getXValue()];
 
                     if (possibleMove.getHasPiece()) {
                         break;
@@ -317,10 +377,10 @@ public class chessBoard extends javax.swing.JFrame implements ActionListener {
             }
 
             if (selectedTileMoves.get(counter).equals("R++")) {
-                int possibleMovesXPosition = tile.getX() + 1;
+                int possibleMovesXPosition = tile.getXValue() + 1;
 
                 while (possibleMovesXPosition < 8 && possibleMovesXPosition > -1) {
-                    possibleMove = arrayBoard[tile.getY()][possibleMovesXPosition];
+                    possibleMove = arrayBoard[tile.getYValue()][possibleMovesXPosition];
 
                     if (possibleMove.getHasPiece()) {
                         break;
@@ -334,11 +394,11 @@ public class chessBoard extends javax.swing.JFrame implements ActionListener {
             }
 
             if (selectedTileMoves.get(counter).equals("L++")) {
-                int possibleMovesXPosition = tile.getX() - 1;
+                int possibleMovesXPosition = tile.getXValue() - 1;
 
                 while (possibleMovesXPosition < 8 && possibleMovesXPosition > -1) {
 
-                    possibleMove = arrayBoard[tile.getY()][possibleMovesXPosition];
+                    possibleMove = arrayBoard[tile.getYValue()][possibleMovesXPosition];
 
                     if (possibleMove.getHasPiece()) {
                         break;
@@ -354,18 +414,18 @@ public class chessBoard extends javax.swing.JFrame implements ActionListener {
 
             if (selectedTileMoves.get(counter).equals("F+2K")) {
 
-                if ((tile.getY() + 2) < 8) {
+                if ((tile.getYValue() + 2) < 8) {
 
-                    if (tile.getX() + 1 < 8) {
-                        possibleMove = arrayBoard[tile.getY() + 2][tile.getX() + 1];
+                    if (tile.getXValue() + 1 < 8) {
+                        possibleMove = arrayBoard[tile.getYValue() + 2][tile.getXValue() + 1];
 
                         if (!possibleMove.getHasPiece()) {
                             allPossibleMoves.add(possibleMove);
                             possibleMove.setBackground(Color.yellow);
                         }
                     }
-                    if (tile.getX() - 1 > (-1)) {
-                        possibleMove = arrayBoard[tile.getY() + 2][tile.getX() - 1];
+                    if (tile.getXValue() - 1 > (-1)) {
+                        possibleMove = arrayBoard[tile.getYValue() + 2][tile.getXValue() - 1];
 
                         if (!possibleMove.getHasPiece()) {
                             allPossibleMoves.add(possibleMove);
@@ -378,18 +438,18 @@ public class chessBoard extends javax.swing.JFrame implements ActionListener {
 
             if (selectedTileMoves.get(counter).equals("B+2K")) {
 
-                if ((tile.getY() - 2) > (-1)) {
+                if ((tile.getYValue() - 2) > (-1)) {
 
-                    if (tile.getX() + 1 < 8) {
-                        possibleMove = arrayBoard[tile.getY() - 2][tile.getX() + 1];
+                    if (tile.getXValue() + 1 < 8) {
+                        possibleMove = arrayBoard[tile.getYValue() - 2][tile.getXValue() + 1];
 
                         if (!possibleMove.getHasPiece()) {
                             allPossibleMoves.add(possibleMove);
                             possibleMove.setBackground(Color.yellow);
                         }
                     }
-                    if (tile.getX() - 1 > (-1)) {
-                        possibleMove = arrayBoard[tile.getY() - 2][tile.getX() - 1];
+                    if (tile.getXValue() - 1 > (-1)) {
+                        possibleMove = arrayBoard[tile.getYValue() - 2][tile.getXValue() - 1];
 
                         if (!possibleMove.getHasPiece()) {
                             allPossibleMoves.add(possibleMove);
@@ -402,18 +462,18 @@ public class chessBoard extends javax.swing.JFrame implements ActionListener {
 
             if (selectedTileMoves.get(counter).equals("L+2K")) {
 
-                if ((tile.getX() - 2) > (-1)) {
+                if ((tile.getXValue() - 2) > (-1)) {
 
-                    if (tile.getY() + 1 < 8) {
-                        possibleMove = arrayBoard[tile.getY() + 1][tile.getX() - 2];
+                    if (tile.getYValue() + 1 < 8) {
+                        possibleMove = arrayBoard[tile.getYValue() + 1][tile.getXValue() - 2];
 
                         if (!possibleMove.getHasPiece()) {
                             allPossibleMoves.add(possibleMove);
                             possibleMove.setBackground(Color.yellow);
                         }
                     }
-                    if (tile.getY() - 1 > (-1)) {
-                        possibleMove = arrayBoard[tile.getY() - 1][tile.getX() - 2];
+                    if (tile.getYValue() - 1 > (-1)) {
+                        possibleMove = arrayBoard[tile.getYValue() - 1][tile.getXValue() - 2];
 
                         if (!possibleMove.getHasPiece()) {
                             allPossibleMoves.add(possibleMove);
@@ -426,18 +486,18 @@ public class chessBoard extends javax.swing.JFrame implements ActionListener {
 
             if (selectedTileMoves.get(counter).equals("R+2K")) {
 
-                if ((tile.getX() + 2) < 8) {
+                if ((tile.getXValue() + 2) < 8) {
 
-                    if (tile.getY() + 1 < 8) {
-                        possibleMove = arrayBoard[tile.getY() + 1][tile.getX() + 2];
+                    if (tile.getYValue() + 1 < 8) {
+                        possibleMove = arrayBoard[tile.getYValue() + 1][tile.getXValue() + 2];
 
                         if (!possibleMove.getHasPiece()) {
                             allPossibleMoves.add(possibleMove);
                             possibleMove.setBackground(Color.yellow);
                         }
                     }
-                    if (tile.getY() - 1 > (-1)) {
-                        possibleMove = arrayBoard[tile.getY() - 1][tile.getX() + 2];
+                    if (tile.getYValue() - 1 > (-1)) {
+                        possibleMove = arrayBoard[tile.getYValue() - 1][tile.getXValue() + 2];
 
                         if (!possibleMove.getHasPiece()) {
                             allPossibleMoves.add(possibleMove);
@@ -447,10 +507,10 @@ public class chessBoard extends javax.swing.JFrame implements ActionListener {
 
                 }
             }
-            
+
             if (selectedTileMoves.get(counter).equals("DL++")) {
-                 int possibleMovesXPosition = tile.getX() + 1;
-                 int possibleMovesYPosition = tile.getY() + 1;
+                int possibleMovesXPosition = tile.getXValue() + 1;
+                int possibleMovesYPosition = tile.getYValue() + 1;
 
                 while (possibleMovesXPosition < 8 && possibleMovesYPosition < 8) {
 
@@ -467,12 +527,11 @@ public class chessBoard extends javax.swing.JFrame implements ActionListener {
                     possibleMovesYPosition = possibleMovesYPosition + 1;
                 }
 
-                
             }
-            
+
             if (selectedTileMoves.get(counter).equals("DL--")) {
-                 int possibleMovesXPosition = tile.getX() - 1;
-                 int possibleMovesYPosition = tile.getY() - 1;
+                int possibleMovesXPosition = tile.getXValue() - 1;
+                int possibleMovesYPosition = tile.getYValue() - 1;
 
                 while (possibleMovesXPosition > (-1) && possibleMovesYPosition > (-1)) {
 
@@ -489,19 +548,19 @@ public class chessBoard extends javax.swing.JFrame implements ActionListener {
                     possibleMovesYPosition = possibleMovesYPosition - 1;
                 }
             }
-            
+
             if (selectedTileMoves.get(counter).equals("DR--")) {
-                 int possibleMovesXPosition = tile.getX() + 1;
-                 int possibleMovesYPosition = tile.getY() - 1;
+                int possibleMovesXPosition = tile.getXValue() + 1;
+                int possibleMovesYPosition = tile.getYValue() - 1;
 
                 while (possibleMovesXPosition < 8 && possibleMovesYPosition > (-1)) {
 
-                    possibleMove = arrayBoard[possibleMovesYPosition ][possibleMovesXPosition ];
+                    possibleMove = arrayBoard[possibleMovesYPosition][possibleMovesXPosition];
 
                     if (possibleMove.getHasPiece()) {
                         break;
                     }
-                    
+
                     allPossibleMoves.add(possibleMove);
                     possibleMove.setBackground(Color.green);
 
@@ -509,10 +568,10 @@ public class chessBoard extends javax.swing.JFrame implements ActionListener {
                     possibleMovesYPosition = possibleMovesYPosition - 1;
                 }
             }
-            
+
             if (selectedTileMoves.get(counter).equals("DR++")) {
-                 int possibleMovesXPosition = tile.getX() - 1;
-                 int possibleMovesYPosition = tile.getY() + 1;
+                int possibleMovesXPosition = tile.getXValue() - 1;
+                int possibleMovesYPosition = tile.getYValue() + 1;
 
                 while (possibleMovesYPosition < 8 && possibleMovesXPosition > (-1)) {
 
@@ -521,7 +580,7 @@ public class chessBoard extends javax.swing.JFrame implements ActionListener {
                     if (possibleMove.getHasPiece()) {
                         break;
                     }
-                    
+
                     allPossibleMoves.add(possibleMove);
                     possibleMove.setBackground(Color.green);
 
@@ -529,12 +588,10 @@ public class chessBoard extends javax.swing.JFrame implements ActionListener {
                     possibleMovesYPosition = possibleMovesYPosition + 1;
                 }
             }
-            
-            counter = counter + 1;
-        
 
-    
-    }
+            counter = counter + 1;
+
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

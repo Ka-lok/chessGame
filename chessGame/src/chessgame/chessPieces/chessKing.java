@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class chessKing extends chessPieces{
     public chessKing(){
          name = "King";
-        shortName = "K";
+        shortName = "King";
         moves = new ArrayList<String>();
         moves.add("F+1");
         moves.add("B+1");

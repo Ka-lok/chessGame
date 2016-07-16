@@ -5,8 +5,10 @@
  */
 package chessgame;
 
+import chessgame.chessPieces.chessBishop;
 import chessgame.chessPieces.chessKnight;
 import chessgame.chessPieces.chessPawn;
+import chessgame.chessPieces.chessQueen;
 import chessgame.chessPieces.chessRook;
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -72,6 +74,8 @@ public class chessBoard extends javax.swing.JFrame implements ActionListener {
         addPawns();
         addRooks();
         addKnights();
+        addBishops();
+        addQueen();
 
     }
 
@@ -94,6 +98,18 @@ public class chessBoard extends javax.swing.JFrame implements ActionListener {
     public void addKnights() {
         chessTile temp = arrayBoard[0][1];
         temp.setChessPiece(new chessKnight());
+        temp.setText(temp.getChessPiece().getShortName());
+    }
+    
+    public void addBishops() {
+        chessTile temp = arrayBoard[0][2];
+        temp.setChessPiece(new chessBishop());
+        temp.setText(temp.getChessPiece().getShortName());
+    }
+    
+    public void addQueen(){
+        chessTile temp = arrayBoard [4][4];
+        temp.setChessPiece(new chessQueen());
         temp.setText(temp.getChessPiece().getShortName());
     }
 
@@ -368,10 +384,94 @@ public class chessBoard extends javax.swing.JFrame implements ActionListener {
 
                 }
             }
+            
+            if (selectedTileMoves.get(counter).equals("DL++")) {
+                 int possibleMovesXPosition = tile.getX() + 1;
+                 int possibleMovesYPosition = tile.getY() + 1;
 
+                while (possibleMovesXPosition < 8 && possibleMovesYPosition < 8) {
+
+                    possibleMove = arrayBoard[possibleMovesYPosition][possibleMovesXPosition];
+
+                    if (possibleMove.getHasPiece()) {
+                        break;
+                    }
+
+                    allPossibleMoves.add(possibleMove);
+                    possibleMove.setBackground(Color.green);
+
+                    possibleMovesXPosition = possibleMovesXPosition + 1;
+                    possibleMovesYPosition = possibleMovesYPosition + 1;
+                }
+
+                
+            }
+            
+            if (selectedTileMoves.get(counter).equals("DL--")) {
+                 int possibleMovesXPosition = tile.getX() - 1;
+                 int possibleMovesYPosition = tile.getY() - 1;
+
+                while (possibleMovesXPosition > (-1) && possibleMovesYPosition > (-1)) {
+
+                    possibleMove = arrayBoard[possibleMovesYPosition][possibleMovesXPosition];
+
+                    if (possibleMove.getHasPiece()) {
+                        break;
+                    }
+
+                    allPossibleMoves.add(possibleMove);
+                    possibleMove.setBackground(Color.green);
+
+                    possibleMovesXPosition = possibleMovesXPosition - 1;
+                    possibleMovesYPosition = possibleMovesYPosition - 1;
+                }
+            }
+            
+            if (selectedTileMoves.get(counter).equals("DR--")) {
+                 int possibleMovesXPosition = tile.getX() + 1;
+                 int possibleMovesYPosition = tile.getY() - 1;
+
+                while (possibleMovesXPosition < 8 && possibleMovesYPosition > (-1)) {
+
+                    possibleMove = arrayBoard[possibleMovesYPosition ][possibleMovesXPosition ];
+
+                    if (possibleMove.getHasPiece()) {
+                        break;
+                    }
+                    
+                    allPossibleMoves.add(possibleMove);
+                    possibleMove.setBackground(Color.green);
+
+                    possibleMovesXPosition = possibleMovesXPosition + 1;
+                    possibleMovesYPosition = possibleMovesYPosition - 1;
+                }
+            }
+            
+            if (selectedTileMoves.get(counter).equals("DR++")) {
+                 int possibleMovesXPosition = tile.getX() - 1;
+                 int possibleMovesYPosition = tile.getY() + 1;
+
+                while (possibleMovesYPosition < 8 && possibleMovesXPosition > (-1)) {
+
+                    possibleMove = arrayBoard[possibleMovesYPosition][possibleMovesXPosition];
+
+                    if (possibleMove.getHasPiece()) {
+                        break;
+                    }
+                    
+                    allPossibleMoves.add(possibleMove);
+                    possibleMove.setBackground(Color.green);
+
+                    possibleMovesXPosition = possibleMovesXPosition - 1;
+                    possibleMovesYPosition = possibleMovesYPosition + 1;
+                }
+            }
+            
             counter = counter + 1;
-        }
+        
 
+    
+    }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

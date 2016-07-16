@@ -11,16 +11,21 @@ import java.util.ArrayList;
  *
  * @author Kalok Chan
  */
-public class chessBishop extends chessPieces{
+public class chessQueen extends chessPieces{
     
-      public chessBishop(){
-        name = "Bishop";
-        shortName = "B";
+    public chessQueen(){
+        name = "Queen";
+        shortName = "Q";
         moves = new ArrayList<String>();
         moves.add("DL++");
         moves.add("DL--");
         moves.add("DR++");
         moves.add("DR--");
+        moves.add("F++");
+        moves.add("B++");
+        moves.add("L++");
+        moves.add("R++");
   
     }
+    
 }

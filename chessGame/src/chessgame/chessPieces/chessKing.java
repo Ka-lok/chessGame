@@ -17,6 +17,13 @@ public class chessKing extends chessPieces{
         shortName = "K";
         moves = new ArrayList<String>();
         moves.add("F+1");
+        moves.add("B+1");
+        moves.add("L+1");
+        moves.add("R+1");
+        moves.add("DL+1");
+        moves.add("DL-1");
+        moves.add("DR+1");
+        moves.add("DR-1");
   
     }
 }

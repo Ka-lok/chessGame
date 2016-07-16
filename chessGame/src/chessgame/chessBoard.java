@@ -6,6 +6,7 @@
 package chessgame;
 
 import chessgame.chessPieces.chessBishop;
+import chessgame.chessPieces.chessKing;
 import chessgame.chessPieces.chessKnight;
 import chessgame.chessPieces.chessPawn;
 import chessgame.chessPieces.chessQueen;
@@ -76,6 +77,7 @@ public class chessBoard extends javax.swing.JFrame implements ActionListener {
         addKnights();
         addBishops();
         addQueen();
+        addKing();
 
     }
 
@@ -108,8 +110,14 @@ public class chessBoard extends javax.swing.JFrame implements ActionListener {
     }
     
     public void addQueen(){
-        chessTile temp = arrayBoard [4][4];
+        chessTile temp = arrayBoard [0][3];
         temp.setChessPiece(new chessQueen());
+        temp.setText(temp.getChessPiece().getShortName());
+    }
+    
+    public void addKing(){
+        chessTile temp = arrayBoard [4][4];
+        temp.setChessPiece(new chessKing());
         temp.setText(temp.getChessPiece().getShortName());
     }
 
@@ -216,7 +224,62 @@ public class chessBoard extends javax.swing.JFrame implements ActionListener {
                     allPossibleMoves.add(possibleMove);
                     possibleMove.setBackground(Color.green);
                 }
-
+            }
+            
+            if (selectedTileMoves.get(counter).equals("B+1")) {
+                possibleMove = arrayBoard[tile.getY() - 1][tile.getX()];
+                if (!possibleMove.getHasPiece()) {
+                    allPossibleMoves.add(possibleMove);
+                    possibleMove.setBackground(Color.green);
+                }
+            }
+            
+            if (selectedTileMoves.get(counter).equals("R+1")) {
+                possibleMove = arrayBoard[tile.getY()][tile.getX() + 1];
+                if (!possibleMove.getHasPiece()) {
+                    allPossibleMoves.add(possibleMove);
+                    possibleMove.setBackground(Color.green);
+                }
+            }
+            
+            if (selectedTileMoves.get(counter).equals("L+1")) {
+                possibleMove = arrayBoard[tile.getY()][tile.getX() - 1];
+                if (!possibleMove.getHasPiece()) {
+                    allPossibleMoves.add(possibleMove);
+                    possibleMove.setBackground(Color.green);
+                }
+            }
+            
+            if (selectedTileMoves.get(counter).equals("DL+1")) {
+                possibleMove = arrayBoard[tile.getY() + 1][tile.getX() - 1];
+                if (!possibleMove.getHasPiece()) {
+                    allPossibleMoves.add(possibleMove);
+                    possibleMove.setBackground(Color.green);
+                }
+            }
+            
+            if (selectedTileMoves.get(counter).equals("DL-1")) {
+                possibleMove = arrayBoard[tile.getY() - 1][tile.getX() + 1];
+                if (!possibleMove.getHasPiece()) {
+                    allPossibleMoves.add(possibleMove);
+                    possibleMove.setBackground(Color.green);
+                }
+            }
+            
+            if (selectedTileMoves.get(counter).equals("DR+1")) {
+                possibleMove = arrayBoard[tile.getY() + 1][tile.getX() + 1];
+                if (!possibleMove.getHasPiece()) {
+                    allPossibleMoves.add(possibleMove);
+                    possibleMove.setBackground(Color.green);
+                }
+            }
+            
+            if (selectedTileMoves.get(counter).equals("DR-1")) {
+                possibleMove = arrayBoard[tile.getY() - 1 ][tile.getX() - 1];
+                if (!possibleMove.getHasPiece()) {
+                    allPossibleMoves.add(possibleMove);
+                    possibleMove.setBackground(Color.green);
+                }
             }
 
             if (selectedTileMoves.get(counter).equals("F++")) {

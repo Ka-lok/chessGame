@@ -5,6 +5,7 @@
  */
 package chessgame;
 
+import chessgame.chessPieces.chessKnight;
 import chessgame.chessPieces.chessPawn;
 import chessgame.chessPieces.chessRook;
 import java.awt.Color;
@@ -18,19 +19,17 @@ import javax.swing.JFrame;
  *
  * @author Kalok Chan
  */
-public class chessBoard extends javax.swing.JFrame implements ActionListener{
+public class chessBoard extends javax.swing.JFrame implements ActionListener {
 
-    /**~
-     * 
+    /**
+     * ~
+     *
      * Creates new form chessBoard
      */
-    
-  
-             
     public chessBoard() {
-        
+
         initComponents();
-        Layout = new GridLayout(8,8);
+        Layout = new GridLayout(8, 8);
         setLayout(Layout);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBoardUp();
@@ -38,60 +37,66 @@ public class chessBoard extends javax.swing.JFrame implements ActionListener{
         allPossibleMoves = new ArrayList<chessTile>();
         setVisible(true);
     }
-    
-    
-    chessTile [] [] arrayBoard = new  chessTile [8] [8];
-    GridLayout Layout; 
+
+    chessTile[][] arrayBoard = new chessTile[8][8];
+    GridLayout Layout;
     private boolean selected;
     private chessTile selectedTile;
     private ArrayList<String> selectedTileMoves;
     private ArrayList<chessTile> allPossibleMoves;
-    
-    public void setBoardUp(){
-       
+
+    public void setBoardUp() {
+
         int x = 0;
         int y = 0;
-        
-       
-        while(x<8){
-            
-            while(y<8){
+
+        while (y < 8) {
+
+            while (x < 8) {
                 chessTile temp = new chessTile();
                 temp.addActionListener(this);
                 this.add(temp);
                 temp.setVisible(true);
+
                 temp.setX(x);
                 temp.setY(y);
-                
-                arrayBoard [x] [y] = temp;
-                
-                y = y + 1;
+
+                arrayBoard[y][x] = temp;
+
+                x = x + 1;
             }
-            y = 0;
-            x = x + 1;
+            x = 0;
+            y = y + 1;
         }
-       
+
         addPawns();
         addRooks();
-        
+        addKnights();
+
     }
-     
-    public void addPawns(){
+
+    public void addPawns() {
         int counter = 0;
-        while(counter < 8){
-        chessTile temp = arrayBoard [1] [counter];
-        temp.setChessPiece(new chessPawn());
-        temp.setText(temp.getChessPiece().getShortName());
-        counter = counter + 1;
+        while (counter < 8) {
+            chessTile temp = arrayBoard[1][counter];
+            temp.setChessPiece(new chessPawn());
+            temp.setText(temp.getChessPiece().getShortName());
+            counter = counter + 1;
         }
     }
-    
-    public void addRooks(){
-        chessTile temp = arrayBoard [0] [0];
+
+    public void addRooks() {
+        chessTile temp = arrayBoard[0][0];
         temp.setChessPiece(new chessRook());
         temp.setText(temp.getChessPiece().getShortName());
     }
-    
+
+    public void addKnights() {
+        chessTile temp = arrayBoard[0][1];
+        temp.setChessPiece(new chessKnight());
+        temp.setText(temp.getChessPiece().getShortName());
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -154,97 +159,219 @@ public class chessBoard extends javax.swing.JFrame implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-       
+
         chessTile temp = (chessTile) e.getSource();
-        if(temp.getHasPiece()){
-            if(selected){
-                selectedTile.setBackground(new Color(240,240,240));
-                
+
+        if (temp.getHasPiece()) {
+            if (selected) {
+                selectedTile.setBackground(new Color(240, 240, 240));
+
                 int numberOfPossibleMoves = allPossibleMoves.size();
                 int counter = 0;
-                while(numberOfPossibleMoves > counter){
-                    allPossibleMoves.get(counter).setBackground(new Color(240,240,240));
+                while (numberOfPossibleMoves > counter) {
+                    allPossibleMoves.get(counter).setBackground(new Color(240, 240, 240));
                     counter = counter + 1;
                 }
-                
+
                 allPossibleMoves.clear();
             }
+
             selected = true;
             selectedTile = temp;
-            temp.setBackground(Color.red);
-            checkMoves(temp);
+            selectedTile.setBackground(Color.red);
+
+            checkMoves(selectedTile);
         }
-        
-        
+
     }
-    
-    public void checkMoves(chessTile tile){
+
+    public void checkMoves(chessTile tile) {
         int numberOfMoves = tile.getChessPiece().getMoves().size();
         selectedTileMoves = tile.getChessPiece().getMoves();
+
         int counter = 0;
-        while(numberOfMoves > counter){
+        while (numberOfMoves > counter) {
+
             chessTile possibleMove;
-            if(selectedTileMoves.get(counter).equals("F+1")){
-               possibleMove = arrayBoard [tile.getX()+ 1] [tile.getY()];
-               allPossibleMoves.add(possibleMove);
-               possibleMove.setBackground(Color.green);
+
+            if (selectedTileMoves.get(counter).equals("F+1")) {
+                possibleMove = arrayBoard[tile.getY() + 1][tile.getX()];
+                if (!possibleMove.getHasPiece()) {
+                    allPossibleMoves.add(possibleMove);
+                    possibleMove.setBackground(Color.green);
+                }
+
             }
-            
-            if(selectedTileMoves.get(counter).equals("F++")){
-                int possibleMovesYPosition = selectedTile.getY() + 1;
-                
-                while(possibleMovesYPosition < 8 && possibleMovesYPosition > -1){
-               possibleMove = arrayBoard [possibleMovesYPosition] [tile.getX()];
-               allPossibleMoves.add(possibleMove);
-               possibleMove.setBackground(Color.blue);
-               
-               possibleMovesYPosition = possibleMovesYPosition + 1;
+
+            if (selectedTileMoves.get(counter).equals("F++")) {
+                int possibleMovesYPosition = tile.getY() + 1;
+
+                while (possibleMovesYPosition < 8 && possibleMovesYPosition > -1) {
+
+                    possibleMove = arrayBoard[possibleMovesYPosition][tile.getX()];
+                    if (possibleMove.getHasPiece()) {
+                        break;
+                    }
+
+                    allPossibleMoves.add(possibleMove);
+                    possibleMove.setBackground(Color.blue);
+
+                    possibleMovesYPosition = possibleMovesYPosition + 1;
                 }
             }
-            
-            if(selectedTileMoves.get(counter).equals("B++")){
-                int possibleMovesYPosition = selectedTile.getY() - 1;
-                
-                while(possibleMovesYPosition < 8 && possibleMovesYPosition > -1){
-               possibleMove = arrayBoard [possibleMovesYPosition] [tile.getX()];
-               allPossibleMoves.add(possibleMove);
-               possibleMove.setBackground(Color.pink);
-               
-               possibleMovesYPosition = possibleMovesYPosition - 1;
+
+            if (selectedTileMoves.get(counter).equals("B++")) {
+                int possibleMovesYPosition = tile.getY() - 1;
+
+                while (possibleMovesYPosition < 8 && possibleMovesYPosition > -1) {
+                    possibleMove = arrayBoard[possibleMovesYPosition][tile.getX()];
+
+                    if (possibleMove.getHasPiece()) {
+                        break;
+                    }
+
+                    allPossibleMoves.add(possibleMove);
+                    possibleMove.setBackground(Color.pink);
+
+                    possibleMovesYPosition = possibleMovesYPosition - 1;
                 }
             }
-            
-            if(selectedTileMoves.get(counter).equals("R++")){
-                int possibleMovesXPosition = selectedTile.getX() + 1;
-                
-                
-                while(possibleMovesXPosition < 8 && possibleMovesXPosition > -1){
-               possibleMove = arrayBoard [tile.getY()] [possibleMovesXPosition];
-               allPossibleMoves.add(possibleMove);
-               possibleMove.setBackground(Color.yellow);
-               
-               possibleMovesXPosition = possibleMovesXPosition + 1;
+
+            if (selectedTileMoves.get(counter).equals("R++")) {
+                int possibleMovesXPosition = tile.getX() + 1;
+
+                while (possibleMovesXPosition < 8 && possibleMovesXPosition > -1) {
+                    possibleMove = arrayBoard[tile.getY()][possibleMovesXPosition];
+
+                    if (possibleMove.getHasPiece()) {
+                        break;
+                    }
+
+                    allPossibleMoves.add(possibleMove);
+                    possibleMove.setBackground(Color.yellow);
+
+                    possibleMovesXPosition = possibleMovesXPosition + 1;
                 }
             }
-            
-            if(selectedTileMoves.get(counter).equals("L++")){
-                int possibleMovesXPosition =  selectedTile.getY() - 1;
-                
-               
-                while(possibleMovesXPosition < 8 && possibleMovesXPosition > -1){
-               possibleMove = arrayBoard [tile.getY()] [possibleMovesXPosition];
-               allPossibleMoves.add(possibleMove);
-               possibleMove.setBackground(Color.green);
-               
-               possibleMovesXPosition = possibleMovesXPosition - 1;
+
+            if (selectedTileMoves.get(counter).equals("L++")) {
+                int possibleMovesXPosition = tile.getX() - 1;
+
+                while (possibleMovesXPosition < 8 && possibleMovesXPosition > -1) {
+
+                    possibleMove = arrayBoard[tile.getY()][possibleMovesXPosition];
+
+                    if (possibleMove.getHasPiece()) {
+                        break;
+                    }
+
+                    allPossibleMoves.add(possibleMove);
+                    possibleMove.setBackground(Color.green);
+
+                    possibleMovesXPosition = possibleMovesXPosition - 1;
                 }
-                
+
             }
-            
-            
-            
+
+            if (selectedTileMoves.get(counter).equals("F+2K")) {
+
+                if ((tile.getY() + 2) < 8) {
+
+                    if (tile.getX() + 1 < 8) {
+                        possibleMove = arrayBoard[tile.getY() + 2][tile.getX() + 1];
+
+                        if (!possibleMove.getHasPiece()) {
+                            allPossibleMoves.add(possibleMove);
+                            possibleMove.setBackground(Color.yellow);
+                        }
+                    }
+                    if (tile.getX() - 1 > (-1)) {
+                        possibleMove = arrayBoard[tile.getY() + 2][tile.getX() - 1];
+
+                        if (!possibleMove.getHasPiece()) {
+                            allPossibleMoves.add(possibleMove);
+                            possibleMove.setBackground(Color.green);
+                        }
+                    }
+
+                }
+            }
+
+            if (selectedTileMoves.get(counter).equals("B+2K")) {
+
+                if ((tile.getY() - 2) > (-1)) {
+
+                    if (tile.getX() + 1 < 8) {
+                        possibleMove = arrayBoard[tile.getY() - 2][tile.getX() + 1];
+
+                        if (!possibleMove.getHasPiece()) {
+                            allPossibleMoves.add(possibleMove);
+                            possibleMove.setBackground(Color.yellow);
+                        }
+                    }
+                    if (tile.getX() - 1 > (-1)) {
+                        possibleMove = arrayBoard[tile.getY() - 2][tile.getX() - 1];
+
+                        if (!possibleMove.getHasPiece()) {
+                            allPossibleMoves.add(possibleMove);
+                            possibleMove.setBackground(Color.green);
+                        }
+                    }
+
+                }
+            }
+
+            if (selectedTileMoves.get(counter).equals("L+2K")) {
+
+                if ((tile.getX() - 2) > (-1)) {
+
+                    if (tile.getY() + 1 < 8) {
+                        possibleMove = arrayBoard[tile.getY() + 1][tile.getX() - 2];
+
+                        if (!possibleMove.getHasPiece()) {
+                            allPossibleMoves.add(possibleMove);
+                            possibleMove.setBackground(Color.yellow);
+                        }
+                    }
+                    if (tile.getY() - 1 > (-1)) {
+                        possibleMove = arrayBoard[tile.getY() - 1][tile.getX() - 2];
+
+                        if (!possibleMove.getHasPiece()) {
+                            allPossibleMoves.add(possibleMove);
+                            possibleMove.setBackground(Color.green);
+                        }
+                    }
+
+                }
+            }
+
+            if (selectedTileMoves.get(counter).equals("R+2K")) {
+
+                if ((tile.getX() + 2) < 8) {
+
+                    if (tile.getY() + 1 < 8) {
+                        possibleMove = arrayBoard[tile.getY() + 1][tile.getX() + 2];
+
+                        if (!possibleMove.getHasPiece()) {
+                            allPossibleMoves.add(possibleMove);
+                            possibleMove.setBackground(Color.yellow);
+                        }
+                    }
+                    if (tile.getY() - 1 > (-1)) {
+                        possibleMove = arrayBoard[tile.getY() - 1][tile.getX() + 2];
+
+                        if (!possibleMove.getHasPiece()) {
+                            allPossibleMoves.add(possibleMove);
+                            possibleMove.setBackground(Color.green);
+                        }
+                    }
+
+                }
+            }
+
             counter = counter + 1;
         }
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

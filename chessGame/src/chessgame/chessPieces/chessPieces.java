@@ -34,7 +34,7 @@ public abstract class chessPieces {
     }
     
     public String getColour(){
-        return name;
+        return colour;
     }
     
     public String getShortName(){

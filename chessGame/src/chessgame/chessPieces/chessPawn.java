@@ -13,11 +13,14 @@ import java.util.ArrayList;
  */
 public class chessPawn extends chessPieces {
     
-    public chessPawn(){
+    public chessPawn(String colour){
+        super();
         name = "Pawn";
         shortName = "P";
         moves = new ArrayList<String>();
         moves.add("F+1");
+        this.colour = colour;
+     
     }
     
     

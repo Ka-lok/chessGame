@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * @author Kalok Chan
  */
 public class chessKing extends chessPieces{
-    public chessKing(){
+    public chessKing(String colour){
          name = "King";
         shortName = "King";
         moves = new ArrayList<String>();
@@ -24,6 +24,7 @@ public class chessKing extends chessPieces{
         moves.add("DL-1");
         moves.add("DR+1");
         moves.add("DR-1");
+        this.colour = colour;
   
     }
 }

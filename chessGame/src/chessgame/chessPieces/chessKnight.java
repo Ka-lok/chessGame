@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class chessKnight extends chessPieces{
     
-    public chessKnight(){
+    public chessKnight(String colour){
         name = "Knight";
         shortName = "K";
         moves = new ArrayList<String>();
@@ -21,6 +21,7 @@ public class chessKnight extends chessPieces{
         moves.add("B+2K");
         moves.add("L+2K");
         moves.add("R+2K");
+        this.colour = colour;
   
     }
     

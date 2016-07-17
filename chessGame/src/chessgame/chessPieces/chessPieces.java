@@ -13,11 +13,17 @@ import java.util.ArrayList;
  */
 public abstract class chessPieces {
     
+    public chessPieces(){
+       
+    }
+    
     protected String name;
     
     protected String shortName;
     
     protected ArrayList<String> moves;
+    
+    protected String colour;
     
     public String getName(){
         return name;
@@ -25,6 +31,10 @@ public abstract class chessPieces {
     
     public void setName(String name){
         this.name = name;
+    }
+    
+    public String getColour(){
+        return name;
     }
     
     public String getShortName(){
